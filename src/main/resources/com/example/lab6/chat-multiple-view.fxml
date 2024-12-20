@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.lab6.controllers.ChatMultipleController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <!-- Vertical layout to organize components -->
+    <VBox spacing="10.0" AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="10.0">
+
+        <!-- Search Section -->
+        <HBox spacing="10.0">
+            <TextField fx:id="searchField" promptText="Search users..." HBox.hgrow="ALWAYS"/>
+            <Button fx:id="searchButton" text="Search" onAction="#handleSearch"/>
+        </HBox>
+
+        <!-- Search Results Section -->
+        <VBox fx:id="searchResults" spacing="5.0">
+            <!-- Dynamic content will be added here -->
+        </VBox>
+
+        <!-- Selected Users Section -->
+        <VBox spacing="5.0">
+            <Label text="Selected Users:"/>
+            <FlowPane fx:id="selectedUsers" hgap="5.0" vgap="5.0" prefWrapLength="580.0">
+                <!-- Dynamic content will be added here -->
+            </FlowPane>
+        </VBox>
+
+        <!-- Message Input Section -->
+        <HBox spacing="10.0" alignment="CENTER" VBox.vgrow="ALWAYS">
+            <TextField fx:id="messageField" promptText="Type your message..." HBox.hgrow="ALWAYS"/>
+            <Button fx:id="sendButton" text="Send" onAction="#sendMessage"/>
+        </HBox>
+
+    </VBox>
+</AnchorPane>

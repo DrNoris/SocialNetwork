@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ScrollPane?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.lab6.controllers.ChatController" spacing="10" alignment="CENTER">
+    <!-- Scrollable chat area: The container for chat messages -->
+    <ScrollPane fx:id="scrollPane" prefHeight="300" prefWidth="400" style="-fx-background-color: #ffffff; -fx-padding: 10;">
+        <VBox fx:id="chatArea" />
+    </ScrollPane>
+
+    <!-- Message input and send button -->
+    <HBox spacing="10" alignment="CENTER">
+        <TextField fx:id="messageField" />
+        <Button fx:id="sendButton" text="Send" onAction="#handleSendMessage" />
+        <Button fx:id="openFinderButton" text="Attachment" onAction="#handleAttachmentButton" />
+        <Button fx:id="takePhoto" text="Photo" onAction="#handlePhotoButton" />
+    </HBox>
+</VBox>
