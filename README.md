@@ -85,6 +85,6 @@ This project is built with the following technologies:
 ## Contact
 
 - **Email**: noris.aurelian.net@gmail.com
-- **LinkedIn**: [Aurelian Noris Sasaran]([url][https://www.linkedin.com/in/your-profile](https://www.linkedin.com/in/aurelian-noris-sasaran-629b6a218/))
+- **LinkedIn**: [Aurelian Noris Sasaran](https://www.linkedin.com/in/aurelian-noris-sasaran-629b6a218/)
 - **GitHub**: [DrNoris](https://github.com/DrNoris)
 
