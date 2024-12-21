@@ -2,7 +2,7 @@
 
 Welcome to the **Chill App**, a full-stack application designed and developed to showcase my skills in software engineering. This project was developed at one of my uni's classes and is now intended as a portfolio piece to demonstrate my proficiency in building applications. It offers essential features for online social interaction, such as account creation, messaging, and activity tracking.
 
-##What I learned
+## What I learned
 
 - **Database Storage**: This was my first time using a database (PostgreSQL) for data persistence, and I gained a strong understanding of how to apps interact with relational databases.
 
@@ -14,12 +14,14 @@ Welcome to the **Chill App**, a full-stack application designed and developed to
 
 ---
 
-##Beyond Requirements: 
-###I loved this project so much that I implemented features beyond the university requirements, such as:
+## Beyond Requirements: 
+### I loved this project so much that I implemented features beyond the university requirements, such as:
 
 - Sending messages to multiple friends.
 
 - Sending photos in chats.
+
+- Replying to messages.
 
 ---
 
