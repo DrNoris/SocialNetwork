@@ -8,7 +8,7 @@ Welcome to the **Chill App**, a full-stack application designed and developed to
 
 - **Controllers**: I learned about the concept of controllers and how they manage communication between the frontend and backend.
 
-- **Object-Oriented Programming (OOP)**: Even though I have eperince in OOP (see my OOP repositories on my GitHub page) I applied various OOP principles such as abstraction, inheritance, and clean code practices to make the project maintainable and extensible.
+- **Object-Oriented Programming (OOP)**: Even though I have experience in OOP (see my OOP repositories on my GitHub page) I applied various OOP principles such as abstraction, inheritance, and clean code practices to make the project maintainable and extensible.
 
 - **Pagination**: Implemented pagination to efficiently handle large datasets in the UI.
 
