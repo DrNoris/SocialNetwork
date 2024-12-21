@@ -43,9 +43,9 @@ Welcome to the **Chill App**, a full-stack application designed and developed to
 
 ---
 
-#Upcoming Improvements
+# Upcoming Improvements
 
-###I am continually improving this project and plan to implement the following features:
+### I am continually improving this project and plan to implement the following features:
 
 - **RecyclerView**: Enhance the chat window interface.
 
