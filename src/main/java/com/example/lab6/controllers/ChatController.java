@@ -192,7 +192,6 @@ public class ChatController {
     }
 
     private void handleReply(AbstractMessage message) {
-        // When clicking a message, set the replyToMessageId
         replyToMessageId = message.getId();
         System.out.println("Replying to message ID: " + replyToMessageId);
     }

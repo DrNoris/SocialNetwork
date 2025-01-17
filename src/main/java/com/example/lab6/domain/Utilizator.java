@@ -7,17 +7,16 @@ import java.util.Objects;
 public class Utilizator extends Entity<Long>{
     private String firstName;
     private String lastName;
-    private String password;
     private String username;
     private List<Utilizator> friends;
+    private byte[] profilePicture;
 
-    public Utilizator(String firstName, String lastName, String username, String password) {
+    public Utilizator(String firstName, String lastName, String username) {
         super(null);
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.friends = new ArrayList<>();
-        this.password = password;
     }
 
     public String getFirstName() {
@@ -40,6 +39,10 @@ public class Utilizator extends Entity<Long>{
         return this.friends;
     }
 
+    public void setFriends(List<Utilizator> friends){
+        this.friends = friends;
+    }
+
     public void addFriend(Utilizator newFriend){
         friends.add(newFriend);
     }
@@ -48,12 +51,12 @@ public class Utilizator extends Entity<Long>{
         friends.remove(Friend);
     }
 
-    public void setPassword(String password){
-        this.password = password;
+    public byte[] getProfilePicture(){
+        return profilePicture;
     }
 
-    public String getPassword(){
-        return this.password;
+    public void setProfilePicture(byte[] photo){
+        this.profilePicture = photo;
     }
 
     public void setUsername(String username){

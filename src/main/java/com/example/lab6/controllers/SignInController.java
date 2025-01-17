@@ -2,6 +2,7 @@ package com.example.lab6.controllers;
 
 import com.example.lab6.domain.Utilizator;
 import com.example.lab6.service.Service;
+import com.example.lab6.service.SignInService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 public class SignInController {
 
-    private final Service service;
+    private final SignInService signInService;
 
     @FXML
     private ImageView socialMediaIcon;
@@ -41,13 +42,11 @@ public class SignInController {
 
     @FXML
     public void initialize() {
-        // Load the image
         socialMediaIcon.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/lab6/chillguy.png")).toExternalForm()));
     }
 
-    // Setter method for Service
-    public SignInController(Service service) {
-        this.service = service;
+    public SignInController(SignInService service) {
+        this.signInService = service;
     }
 
     public void handleSignIn() {
@@ -57,13 +56,13 @@ public class SignInController {
         String password = passwordField.getText();
 
         try {
-            Optional<Utilizator> optionalUser = service.addUtilizator(firstName, lastName, username, password);
-            if (optionalUser.isEmpty()) {
-                System.out.println("User added.");
-                returnToLogin(); // Return to login screen after successful sign-up
-            } else {
-                System.out.println("User could not be added. An existing user was found: " + optionalUser.get().getFirstName() + " " + optionalUser.get().getLastName());
-            }
+            signInService.signIn(firstName, lastName, username, password);
+//            if (optionalUser.isEmpty()) {
+//                System.out.println("User added.");
+//                returnToLogin();
+//            } else {
+//                System.out.println("User could not be added. An existing user was found: " + optionalUser.get().getFirstName() + " " + optionalUser.get().getLastName());
+//            }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -71,14 +70,12 @@ public class SignInController {
 
     private void returnToLogin() {
         try {
-            // Load the login view
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/lab6/login-view.fxml"));
 
             Parent root = loader.load();
 
-            // Get the current stage (window) and set the new scene
             Scene scene = new Scene(root);
-            Stage stage = (Stage) signIn.getScene().getWindow();  // Use signIn button to get the stage
+            Stage stage = (Stage) signIn.getScene().getWindow();
             stage.setScene(scene);
             stage.show();  // Show the new scene
 

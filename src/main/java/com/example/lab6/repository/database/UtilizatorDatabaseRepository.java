@@ -6,6 +6,7 @@ import com.example.lab6.domain.Utilizator;
 import com.example.lab6.domain.validators.Validator;
 import com.example.lab6.repository.Repository;
 
+
 import java.sql.*;
 import java.util.*;
 
@@ -27,11 +28,16 @@ public class UtilizatorDatabaseRepository implements Repository<Long, Utilizator
             String firstName = set.getString("first_name");
             String lastName = set.getString("last_name");
             Long id = set.getLong("id");
-            String password = set.getString("password");
             String username = set.getString("user_name");
+            byte[] profilePicture = set.getBytes("photo");
 
-            Utilizator utilizator = new Utilizator(firstName, lastName, username, password);
+            Utilizator utilizator = new Utilizator(firstName, lastName, username);
             utilizator.setId(id);
+
+            if (profilePicture != null) {
+                utilizator.setProfilePicture(profilePicture);
+            }
+
             return utilizator;
         }
         catch (SQLException e){
@@ -128,14 +134,13 @@ public class UtilizatorDatabaseRepository implements Repository<Long, Utilizator
 
     @Override
     public Optional<Utilizator> save(Utilizator entity) {
-        String sql = "insert into users (first_name, last_name, user_name, password) values (?, ?, ?, ?)";
+        String sql = "insert into users (first_name, last_name, user_name) values (?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // Request the generated keys
 
             ps.setString(1, entity.getFirstName());
             ps.setString(2, entity.getLastName());
             ps.setString(3, entity.getUsername());
-            ps.setString(4, entity.getPassword());
 
             int rowsAffected = ps.executeUpdate(); // Execute the insert
 
@@ -146,9 +151,10 @@ public class UtilizatorDatabaseRepository implements Repository<Long, Utilizator
                         // Set the generated ID to the entity
                         entity.setId(generatedKeys.getLong(1));
                         validator.validate(entity);
+                        return Optional.of(entity);
                     }
                 }
-                return Optional.empty();  // Return Optional.empty() to indicate success (no errors)
+                return Optional.empty();
             }
         } catch (SQLException e) {
             e.printStackTrace(); // Log or handle the exception as necessary
@@ -200,12 +206,13 @@ public class UtilizatorDatabaseRepository implements Repository<Long, Utilizator
         if(utilizator == null)
             throw new IllegalArgumentException("entity must be not null!");
         validator.validate(utilizator);
-        String sql = "update users set first_name = ?, last_name = ? where id = ?";
+        String sql = "update users set first_name = ?, last_name = ?, photo = ? where id = ?";
         try (Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, utilizator.getFirstName());
             ps.setString(2, utilizator.getLastName());
-            ps.setLong(3, utilizator.getId());
+            ps.setBytes(3, utilizator.getProfilePicture());
+            ps.setLong(4, utilizator.getId());
             if( ps.executeUpdate() > 0 )
                 return Optional.empty();
             return Optional.of(utilizator);

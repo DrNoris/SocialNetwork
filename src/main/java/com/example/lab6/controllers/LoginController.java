@@ -1,10 +1,7 @@
 package com.example.lab6.controllers;
 
 import com.example.lab6.domain.Utilizator;
-import com.example.lab6.service.AppService;
-import com.example.lab6.service.LoginService;
-import com.example.lab6.service.MessageService;
-import com.example.lab6.service.Service;
+import com.example.lab6.service.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,8 +22,9 @@ public class LoginController {
 
     private final LoginService loginService;
     private final AppService appService;
-    private final Service service;
     private final MessageService messageService;
+    private final ProfileService profileService;
+    private final SignInService signInService;
 
     @FXML
     private ImageView socialMediaIcon;
@@ -43,11 +41,12 @@ public class LoginController {
     @FXML
     private Button siginButton;
 
-    public LoginController(LoginService loginService, AppService appService, Service service, MessageService messageService){
+    public LoginController(LoginService loginService, AppService appService, MessageService messageService, ProfileService profileService, SignInService signInService){
         this.loginService = loginService;
-        this.service = service;
         this.appService = appService;
         this.messageService = messageService;
+        this.profileService = profileService;
+        this.signInService = signInService;
     }
 
     private void showError(String message) {
@@ -61,57 +60,53 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        // Load the image
         socialMediaIcon.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/lab6/chillguy.png")).toExternalForm()));
     }
 
 
     @FXML
     private void handleLogin() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-
-        Optional<Utilizator> user;
-
         try {
-            user = loginService.login(username, password);  // Assuming loginService is correct
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();  // Log the error (can be replaced with a user-friendly message)
-            showError("Login failed: " + e.getMessage()); // Show a message to the user (optional)
-            return; // Exit the method early if there's an exception
-        }
+            String username = usernameField.getText();
+            String password = passwordField.getText();
 
-        if (user.isPresent()) {
-            try {
-                // Load the new scene (app.view)
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/lab6/app-view.fxml"));
-                loader.setControllerFactory(controllerClass -> {
-                    if (controllerClass == AppController.class) {
-                        return new AppController(appService, messageService, user.get());  // Inject Service here
-                    }
-                    try {
-                        return controllerClass.getDeclaredConstructor().newInstance();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+            byte[] passwordBytes = password.getBytes("UTF-8");
 
-                Parent root = loader.load();
+            Optional<Utilizator> user = loginService.login(username, passwordBytes);
 
-                // Get the current stage (window) and set the new scene
-                Scene scene = new Scene(root);
-                Stage stage = (Stage) usernameField.getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();  // Show the new scene
+            if (user.isPresent()) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/lab6/app-view.fxml"));
+                    loader.setControllerFactory(controllerClass -> {
+                        if (controllerClass == AppController.class) {
+                            return new AppController(appService, messageService, profileService, user.get());
+                        }
+                        try {
+                            return controllerClass.getDeclaredConstructor().newInstance();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
 
-            } catch (IOException e) {
-                e.printStackTrace();  // Handle any errors loading the scene
-                showError("Failed to load the new scene.");
+                    Parent root = loader.load();
+
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) usernameField.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show(); // Show the new scene
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showError("Failed to load the new scene.");
+                }
+            } else {
+                showError("Invalid username or password.");
             }
-        } else {
-            showError("Invalid username or password.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("An error occurred while processing the login.");
         }
     }
+
 
 
 
@@ -121,7 +116,7 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/lab6/signin-view.fxml"));
             loader.setControllerFactory(controllerClass -> {
                 if (controllerClass == SignInController.class) {
-                    return new SignInController(service);  // Inject Service here
+                    return new SignInController(signInService);
                 }
                 try {
                     return controllerClass.getDeclaredConstructor().newInstance();
@@ -132,7 +127,6 @@ public class LoginController {
 
             Parent root = loader.load();
 
-            // Get the current stage (window) and set the new scene
             Scene scene = new Scene(root);
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.setScene(scene);
@@ -141,8 +135,5 @@ public class LoginController {
             e.printStackTrace();  // Handle any errors loading the scene
             showError("Failed to load the new scene.");
         }
-    }
-
-    public static class ChatMultipleView {
     }
 }

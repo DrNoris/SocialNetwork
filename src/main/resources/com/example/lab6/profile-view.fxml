@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.lab6.controllers.ProfileController"
+            prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;">
+
+    <!-- Main Vertical Layout -->
+    <VBox spacing="20" alignment="TOP_CENTER" style="-fx-padding: 20;" prefWidth="600">
+        <!-- Profile Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10; -fx-background-color: #bfbfbf" HBox.hgrow="ALWAYS">
+            <!-- Profile Picture -->
+            <Button fx:id="profileButton" onAction="#handleProfileButtonAction"
+                    style="-fx-background-color: transparent; -fx-padding: 0;">
+                <graphic>
+                    <ImageView fx:id="profileImage" fitWidth="100" fitHeight="100" preserveRatio="true" />
+                </graphic>
+            </Button>
+
+            <!-- Spacer between Profile Image and Info -->
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- User Information -->
+            <VBox alignment="CENTER_LEFT" spacing="10">
+                <!-- Username -->
+                <Label fx:id="usernameLabel" text="Username" style="-fx-font-size: 18; -fx-font-weight: bold;" />
+                <!-- Real Name -->
+                <Label fx:id="realNameLabel" text="Real Name" style="-fx-font-size: 14; -fx-text-fill: gray;" />
+                <!-- Number of Friends -->
+                <Label fx:id="friendsCountLabel" text="Friends: 0" style="-fx-font-size: 14;" />
+            </VBox>
+        </HBox>
+
+        <!-- Divider -->
+        <Separator style="-fx-background-color: lightgray;" />
+
+        <!-- Additional Content Placeholder -->
+        <Label text="Content Goes Here" style="-fx-font-size: 14; -fx-text-fill: gray;" />
+    </VBox>
+
+</AnchorPane>

@@ -131,10 +131,9 @@ public class PrietenieDatabaseRepository implements PagingRepository<Tuple<Long,
             String firstName = set.getString("first_name");
             String lastName = set.getString("last_name");
             Long id = set.getLong("id");
-            String password = set.getString("password");
             String username = set.getString("user_name");
 
-            Utilizator utilizator = new Utilizator(firstName, lastName, username, password);
+            Utilizator utilizator = new Utilizator(firstName, lastName, username);
             utilizator.setId(id);
             return utilizator;
         }
@@ -145,7 +144,7 @@ public class PrietenieDatabaseRepository implements PagingRepository<Tuple<Long,
 
     public Iterable<Utilizator> findAllWith(Long id) {
         List<Utilizator> friends = new ArrayList<>();
-        String sql = "SELECT users.id, users.first_name, users.last_name, users.user_name, users.password " +
+        String sql = "SELECT users.id, users.first_name, users.last_name, users.user_name " +
                 "FROM (SELECT user_id2 AS friend_id FROM friendships WHERE user_id1 = ? " +
                 "UNION ALL " +
                 "SELECT user_id1 AS friend_id FROM friendships WHERE user_id2 = ?" +
@@ -203,7 +202,7 @@ public class PrietenieDatabaseRepository implements PagingRepository<Tuple<Long,
 
     public Page<Utilizator> findAllWith(Long id, Pageable pageable) {
         List<Utilizator> friends = new ArrayList<>();
-        String sql = "SELECT users.id, users.first_name, users.last_name, users.user_name, users.password " +
+        String sql = "SELECT users.id, users.first_name, users.last_name, users.user_name " +
                 "FROM (" +
                 "    SELECT user_id2 AS friend_id FROM friendships WHERE user_id1 = ? " +
                 "    UNION ALL " +

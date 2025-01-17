@@ -1,15 +1,10 @@
 package com.example.lab6;
 
 import com.example.lab6.controllers.LoginController;
+import com.example.lab6.controllers.SignInController;
 import com.example.lab6.domain.validators.UtilizatorValidator;
-import com.example.lab6.repository.database.MessageDatabaseRepository;
-import com.example.lab6.repository.database.PrietenieDatabaseRepository;
-import com.example.lab6.repository.database.RequestDatabaseRepository;
-import com.example.lab6.repository.database.UtilizatorDatabaseRepository;
-import com.example.lab6.service.AppService;
-import com.example.lab6.service.LoginService;
-import com.example.lab6.service.MessageService;
-import com.example.lab6.service.Service;
+import com.example.lab6.repository.database.*;
+import com.example.lab6.service.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -32,23 +27,28 @@ public class HelloApplication extends Application {
                 ,"jdbc:postgresql://localhost:5432/postgres");
         MessageDatabaseRepository messageDB = new MessageDatabaseRepository("postgres", "noris2580"
                 ,"jdbc:postgresql://localhost:5432/postgres", usersDB);
+        UserCredentialsDatabaseRepository credentialsDB= new UserCredentialsDatabaseRepository("postgres", "noris2580"
+                ,"jdbc:postgresql://localhost:5432/postgres");
 
-        LoginService loginService = new LoginService(usersDB);
+
+        LoginService loginService = new LoginService(credentialsDB, usersDB);
         Service service = new Service(priteniDB, usersDB, requestDB);
         AppService appService = new AppService(usersDB, priteniDB, requestDB);
         MessageService messageService = new MessageService(messageDB);
+        ProfileService profileService = new ProfileService(usersDB);
+        SignInService signInService = new SignInService(usersDB, credentialsDB);
 
-        openUserWindow("User 1 - Login", loginService, appService, service, messageService);
+        openUserWindow("ChillApp", loginService, appService, messageService, profileService, signInService);
         //openUserWindow("User 2 - Login", loginService, appService, service, messageService);
     }
 
-    private void openUserWindow(String title, LoginService loginService, AppService appService, Service service, MessageService messageService) throws IOException {
+    private void openUserWindow(String title, LoginService loginService, AppService appService, MessageService messageService, ProfileService profileService, SignInService signInService) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/lab6/login-view.fxml"));
 
         // Setează controller-ul folosind factory pentru dependențe
         loader.setControllerFactory(controllerClass -> {
             if (controllerClass == LoginController.class) {
-                return new LoginController(loginService, appService, service, messageService);
+                return new LoginController(loginService, appService, messageService, profileService, signInService);
             }
             try {
                 return controllerClass.getDeclaredConstructor().newInstance();
@@ -65,8 +65,8 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
-
     public static void main(String[] args) {
         launch();
     }
 }
+

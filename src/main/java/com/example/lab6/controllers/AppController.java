@@ -6,15 +6,19 @@ import com.example.lab6.domain.observer.Observer;
 import com.example.lab6.domain.paging.Pageable;
 import com.example.lab6.service.AppService;
 import com.example.lab6.service.MessageService;
+import com.example.lab6.service.ProfileService;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -23,6 +27,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import javax.swing.*;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,14 +39,16 @@ public class AppController implements Observer {
     private final AppService service;
     private final Utilizator currentUser;
     private final MessageService messageService;
+    private final ProfileService profileService;
     private int currentPage = 0;
     private int pageSize = 5;
     private int maxPage = 0;
 
-    public AppController(AppService service, MessageService messageService, Utilizator currentUser){
+    public AppController(AppService service, MessageService messageService, ProfileService profileService, Utilizator currentUser){
         this.service = service;
         this.currentUser = currentUser;
         this.messageService = messageService;
+        this.profileService = profileService;
         service.addObserver(this);
     }
 
@@ -54,6 +61,12 @@ public class AppController implements Observer {
     private Button searchButton;
 
     //Friends table
+    @FXML
+    public ImageView profileImage;
+    @FXML
+    public HBox myAccount;
+    @FXML
+    public Label accountName;
     @FXML
     private TableView<Utilizator> friendsTable;
     @FXML
@@ -88,10 +101,25 @@ public class AppController implements Observer {
 
         friendsTable.setPlaceholder(new Label("No friends to display."));
 
+        configureAccountData();
         configureActionColumn();
         loadFriends();
         loadNotifications();
         loadActivity();
+    }
+
+    private void configureAccountData() {
+        accountName.setText(currentUser.getUsername());
+
+        byte[] profilePicture = currentUser.getProfilePicture();
+        if (profilePicture != null) {
+            Image image = new Image(new ByteArrayInputStream(profilePicture));
+            profileImage.setImage(image);
+        }
+        else {
+            Image placeholderImage = new Image(getClass().getResourceAsStream("/images/anonymous-user.jpg"));
+            profileImage.setImage(placeholderImage);
+        }
     }
 
 
@@ -387,6 +415,29 @@ public class AppController implements Observer {
         }
     }
 
+    public void handleProfileButtonAction() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/lab6/profile-view.fxml"));
+
+            Optional<List<Utilizator>> friends = service.getAllFriendships(currentUser);
+            if (friends.isPresent())
+                currentUser.setFriends(friends.get());
+
+            loader.setControllerFactory(param -> new ProfileController(profileService, currentUser));
+
+            Parent root = loader.load();
+
+            Stage profileStage = new Stage();
+            profileStage.setTitle(currentUser.getUsername());
+
+            Scene scene = new Scene(root, 600, 400);
+            profileStage.setScene(scene);
+            profileStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void previousPage(Button previousPageButton, Button nextPageButton) {
         if(currentPage > 0) {
             currentPage = currentPage - 1;
@@ -415,5 +466,6 @@ public class AppController implements Observer {
     public void handleViewNotifications() {
 
     }
+
 
 }

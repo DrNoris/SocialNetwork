@@ -25,8 +25,8 @@ public class Service {
         this.requestRepo = requestRepo;
     }
 
-    public Optional<Utilizator> addUtilizator(String firstName, String lastName, String username, String password){
-        Utilizator u = new Utilizator(firstName, lastName, username, password);
+    public Optional<Utilizator> addUtilizator(String firstName, String lastName, String username){
+        Utilizator u = new Utilizator(firstName, lastName, username);
         return utilizatoriRepo.save(u);
     }
 
